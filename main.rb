@@ -5,6 +5,32 @@ require 'pry'
 
 set :sessions, true
 
+helpers do
+
+  def score(hand)
+    values = hand.map{ |card| card[0]}
+
+    score = 0
+
+    values.each do |value|
+      if value == 'A'
+        score += 11
+      else 
+        score += (value.to_i == 0 ? 10 : value.to_i)
+      end
+    end
+
+    # Correct for Aces
+    values.select{|val| val == 'A'}.count.times do
+      break if score <= Blackjack::BLACKJACK_AMOUNT
+      score -= 10
+    end
+
+    score
+  end
+
+end
+
 get '/' do
   if session[:player_name]
     redirect '/home'
@@ -52,5 +78,15 @@ get '/new_blackjack' do
 end
 
 get '/blackjack' do
+  session[:player_score] = score(session[:player_cards])
   erb :blackjack
+end
+
+post '/blackjack/player_hit' do
+  session[:player_cards] << session[:deck].pop
+  redirect '/blackjack'
+end
+
+post '/blackjack/player_stay' do
+  redirect '/blackjack'
 end

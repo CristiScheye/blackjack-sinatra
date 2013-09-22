@@ -8,6 +8,11 @@
  * Designed and built with all the love in the world @twitter by @mdo and @fat.
  */
 
+
+#cardtable {
+  background-color: green;
+}
+
 .clearfix {
   *zoom: 1;
 }
@@ -1996,7 +2001,7 @@ legend + .control-group {
 
 table {
   max-width: 100%;
-  background-color: transparent;
+  background-color: blue;
   border-collapse: collapse;
   border-spacing: 0;
 }

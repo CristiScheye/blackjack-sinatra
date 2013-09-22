@@ -1,0 +1,35 @@
+<span style="text-align: center"> 
+  <h1> Blackjack </h1>
+</span>
+
+<!-- Dealer Cards -->
+<h4>Dealer's Cards:</h4>
+<div style="background-color: green">
+  <table>
+    <tr>
+      <% session[:dealer_cards].each do |card| %>
+        <td ><%= card  %></td>
+      <% end %>
+    </tr>
+  </table>
+</div>
+
+
+
+<h4> <%= "#{session[:player_name]}'s Cards:" %> </h4>
+
+<div style="background-color: green">
+  <ul>
+    <% session[:player_cards].each do |card| %>
+      <li><%= card  %></li>
+    <% end %>
+  </ul>
+</div>
+<p><%= "#{session[:player_name]}'s Total: #{session[:player_score]}" %></p>
+
+<form>
+  <button  type="submit" class="btn btn-success" name="Hit" formaction="/blackjack/player_hit" formmethod="post">Hit</button>
+  <button type="submit" class="btn btn-warning" value="Stay" formaction="/blackjack/player_stay" formmethod="post">Stay</button>
+</form>
+
+

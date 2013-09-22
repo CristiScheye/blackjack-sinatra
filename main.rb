@@ -117,7 +117,7 @@ end
 
 get '/blackjack/new' do
   #setup deck
-  values = ['2', '3', '4', '5', '6', '7', '8', '9', '10', 'J', 'Q', 'K', 'A']
+  values = ['2', '3', '4', '5', '6', '7', '8', '9', '10', 'Jack', 'Queen', 'King', 'Ace']
   suits = ['Spades', 'Diamonds', 'Hearts', 'Clubs']
   session[:deck] = values.product(suits).shuffle!
   

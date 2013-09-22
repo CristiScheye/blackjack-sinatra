@@ -1,0 +1,9 @@
+div#card_table {
+  background-color: green;
+}
+
+form#hit_button, 
+form#stay_button {
+  float: left;
+  padding-right: 1em;
+}

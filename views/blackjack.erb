@@ -3,20 +3,19 @@
 </span>
 
 <% if @game_over %>
-  <a href="/blackjack/new"><button type="submit" class="btn" href="/blackjack/new">New Game</button></a>
+  <form action="/blackjack/new" method="get">
+    <input type="submit" class="btn" value="New Game" />
+  </form>
 <% end %>
 
 <!-- Dealer Cards -->
 
 <h4>Dealer's Cards:</h4>
-<div style="background-color: green">
-  <table>
-    <tr>
-      <% session[:dealer_cards].each do |card| %>
-        <td ><%= card  %></td>
-      <% end %>
-    </tr>
-  </table>
+<div class="well" id="card_table">
+  <% session[:dealer_cards].each do |card| %>
+    <% img_name = "/images/cards/#{card[1].downcase}_#{card[0].downcase}.jpg" %>
+    <img src=<%= img_name %> /> 
+  <% end %>
 </div>
 
 <p><%= "Dealer's Total: #{calculate_score(session[:dealer_cards])}" if !@player_turn %></p>
@@ -28,30 +27,34 @@
 <% end %>
 </form>
 
-
-
 <!-- Player's Cards -->
 
 <h4> <%= "#{session[:player_name]}'s Cards:" %> </h4>
 
-<div style="background-color: green">
-  <ul>
+<div class="well" id="card_table">
     <% session[:player_cards].each do |card| %>
-      <li><%= card  %></li>
+      <% img_name = "/images/cards/#{card[1].downcase}_#{card[0].downcase}.jpg" %>
+      <img src=<%= img_name %> /> 
     <% end %>
-  </ul>
 </div>
 <p><%= "#{session[:player_name]}'s Total: #{calculate_score(session[:player_cards])}" %></p>
 
 
 
 
-<form>
-  <% if @player_turn %> 
-    <button  type="submit" class="btn btn-success"  formaction="/blackjack/player_hit" formmethod="post">Hit</button>
-    <button type="submit" class="btn btn-warning"  formaction="/blackjack/player_stay" formmethod="post">Stay</button>
-  <% end %>
-</form>
+
+<% if @player_turn %> 
+  <p>What would <%= session[:player_name] %> like to do?</p>
+  <form id="hit_button" action="/blackjack/player_hit" method="post">
+    <input type="submit" class="btn btn-success"  value="Hit">
+  </form>
+
+  <form id="stay_button" action="/blackjack/player_stay" method="post">
+
+    <input type="submit" class="btn btn-warning" value="Stay" />
+  </form>
+<% end %>
+
 
 
 

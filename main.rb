@@ -83,10 +83,11 @@ helpers do
 
   def card_image(card)
     if card == 'cover'
-      "<img src='images/cards/cover.jpg' />"
+      img_name = "<img src='/images/cards/cover.jpg' />"
     else
-      "<img src='/images/cards/#{card[1].downcase}_#{card[0].downcase}.jpg' />"
+      img_name = "<img src='/images/cards/#{card[1].downcase}_#{card[0].downcase}.jpg' />"
     end
+    img_name
   end
 
 end
@@ -152,7 +153,6 @@ end
 post '/blackjack/player_hit' do
   @msg = 'You chose to hit'
   session[:player_cards] << session[:deck].pop
-
   check_player_score
  
   erb :blackjack
@@ -161,7 +161,6 @@ end
 post '/blackjack/player_stay' do
   @msg = 'You chose to stay.'
   @player_turn = false
-
   check_dealer_score # if dealer's score is between 17 and 21, will also compare scores
   
   erb :blackjack
@@ -170,7 +169,6 @@ end
 post '/blackjack/dealer_hit' do
   session[:dealer_cards] << session[:deck].pop
   @player_turn = false
-
   check_dealer_score # if dealer's score is between 17 and 21, will also compare scores 
   
   erb :blackjack

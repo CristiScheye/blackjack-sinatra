@@ -2,7 +2,12 @@
   <h1> Blackjack </h1>
 </span>
 
+<% if @game_over %>
+  <a href="/blackjack/new"><button type="submit" class="btn" href="/blackjack/new">New Game</button></a>
+<% end %>
+
 <!-- Dealer Cards -->
+
 <h4>Dealer's Cards:</h4>
 <div style="background-color: green">
   <table>
@@ -14,7 +19,18 @@
   </table>
 </div>
 
+<p><%= "Dealer's Total: #{calculate_score(session[:dealer_cards])}" if !@player_turn %></p>
 
+
+<form>
+<% if @dealer_turn %>
+  <button type="submit" class="btn btn-primary" formaction="/blackjack/dealer_hit" formmethod="post">See Dealer's Next Card</button>
+<% end %>
+</form>
+
+
+
+<!-- Player's Cards -->
 
 <h4> <%= "#{session[:player_name]}'s Cards:" %> </h4>
 
@@ -25,11 +41,17 @@
     <% end %>
   </ul>
 </div>
-<p><%= "#{session[:player_name]}'s Total: #{session[:player_score]}" %></p>
+<p><%= "#{session[:player_name]}'s Total: #{calculate_score(session[:player_cards])}" %></p>
+
+
+
 
 <form>
-  <button  type="submit" class="btn btn-success" name="Hit" formaction="/blackjack/player_hit" formmethod="post">Hit</button>
-  <button type="submit" class="btn btn-warning" value="Stay" formaction="/blackjack/player_stay" formmethod="post">Stay</button>
+  <% if @player_turn %> 
+    <button  type="submit" class="btn btn-success"  formaction="/blackjack/player_hit" formmethod="post">Hit</button>
+    <button type="submit" class="btn btn-warning"  formaction="/blackjack/player_stay" formmethod="post">Stay</button>
+  <% end %>
 </form>
+
 
 

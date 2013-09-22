@@ -43,7 +43,7 @@ helpers do
     @game_over = true
   end
 
-  def check_player_score(player_hand)
+  def check_player_score
     if is_busted?(session[:player_cards])
       @msg = "Sorry #{session[:player_name]}, you busted. You lose :("
       end_game_variables
@@ -53,15 +53,30 @@ helpers do
     end
   end
 
-  def check_dealer_score(dealer_hand)
-    if calculate_score(session[:dealer_cards]) < 17
-      @dealer_turn = true
-    elsif is_busted?(session[:dealer_cards])
+  def check_dealer_score
+    if is_busted?(session[:dealer_cards])  # score > 21
       @msg = "Dealer busted! You win :)"
       end_game_variables
-    elsif is_blackjack?(session[:dealer_cards])
+    elsif is_blackjack?(session[:dealer_cards]) # score == 21
       @msg = 'Dealer hit blackjack. You lose :('
       end_game_variables
+    elsif calculate_score(session[:dealer_cards]) < 17
+      @dealer_turn = true
+    else  #  17 <= score < 21 
+      compare_scores(session[:dealer_cards], session[:player_cards])
+    end
+  end
+
+  def compare_scores(dealer_hand, player_hand)
+    end_game_variables
+    dealer_score = calculate_score(dealer_hand)
+    player_score = calculate_score(player_hand)
+    if dealer_score > player_score
+      @msg = "Sorry, you lose. Dealer's total of #{dealer_score} beat your score of #{player_score}."
+    elsif dealer_score < player_score
+      @msg = "Congrats, you win! Your total of #{player_score} beat the dealer's score of #{dealer_score}."
+    else
+      @msg = "It's a tie."
     end
   end
 
@@ -121,7 +136,7 @@ get '/blackjack/new' do
 end
 
 get '/blackjack' do
-  check_player_score(session[:player_cards])
+  check_player_score
   erb :blackjack
 end
 
@@ -129,9 +144,7 @@ post '/blackjack/player_hit' do
   @msg = 'You chose to hit'
   session[:player_cards] << session[:deck].pop
 
-  check_player_score(session[:player_cards])
-
-  # declare winner, adjust purse
+  check_player_score
  
   erb :blackjack
 end
@@ -140,16 +153,16 @@ post '/blackjack/player_stay' do
   @msg = 'You chose to stay.'
   @player_turn = false
 
-  check_dealer_score(session[:dealer_cards])
-  # declare winner, adjust purse
-
+  check_dealer_score # if dealer's score is between 17 and 21, will also compare scores
+  
   erb :blackjack
 end
 
 post '/blackjack/dealer_hit' do
   session[:dealer_cards] << session[:deck].pop
   @player_turn = false
-  check_dealer_score([:dealer_cards])
+
+  check_dealer_score # if dealer's score is between 17 and 21, will also compare scores 
   
   erb :blackjack
 end

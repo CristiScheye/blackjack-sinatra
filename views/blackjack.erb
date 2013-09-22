@@ -1,20 +1,23 @@
-<span style="text-align: center"> 
-  <h1> Blackjack </h1>
-</span>
-
 <% if @game_over %>
   <form action="/blackjack/new" method="get">
     <input type="submit" class="btn" value="New Game" />
   </form>
 <% end %>
 
+ 
+<h1 id="title"> Blackjack </h1>
+
+
 <!-- Dealer Cards -->
 
 <h4>Dealer's Cards:</h4>
 <div class="well" id="card_table">
-  <% session[:dealer_cards].each do |card| %>
-    <% img_name = "/images/cards/#{card[1].downcase}_#{card[0].downcase}.jpg" %>
-    <img src=<%= img_name %> /> 
+  <% session[:dealer_cards].each_with_index do |card, index| %>
+    <% if @player_turn && index == 0 %>
+      <%= card_image('cover') %>
+    <% else %>
+      <%= card_image(card) %>
+    <% end %>
   <% end %>
 </div>
 
@@ -33,8 +36,7 @@
 
 <div class="well" id="card_table">
     <% session[:player_cards].each do |card| %>
-      <% img_name = "/images/cards/#{card[1].downcase}_#{card[0].downcase}.jpg" %>
-      <img src=<%= img_name %> /> 
+      <%= card_image(card) %>
     <% end %>
 </div>
 <p><%= "#{session[:player_name]}'s Total: #{calculate_score(session[:player_cards])}" %></p>

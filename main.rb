@@ -80,6 +80,15 @@ helpers do
     end
   end
 
+
+  def card_image(card)
+    if card == 'cover'
+      "<img src='images/cards/cover.jpg'"
+    else
+      "<img src='/images/cards/#{card[1].downcase}_#{card[0].downcase}.jpg'>"
+    end
+  end
+
 end
 
 before do

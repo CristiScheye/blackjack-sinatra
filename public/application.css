@@ -7,3 +7,7 @@ form#stay_button {
   float: left;
   padding-right: 1em;
 }
+
+h1#title {
+  text-align: center;
+}

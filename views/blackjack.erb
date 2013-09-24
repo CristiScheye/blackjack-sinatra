@@ -1,62 +1,83 @@
-<% if @game_over %>
-  <form action="/blackjack/new" method="get">
-    <input type="submit" class="btn" value="New Game" />
-  </form>
-<% end %>
 
- 
-<h1 id="title"> Blackjack </h1>
+<div id="header">
+  <h1 id="title"> Blackjack </h1>
+</div>
+
+<div  class="well" id="sidebar">
 
 
-<!-- Dealer Cards -->
-
-<h4>Dealer's Cards:</h4>
-<div class="well" id="card_table">
-  <% if @player_turn %>
-    <%= card_image('cover') %>
-    <%= card_image(session[:dealer_cards][1]) %>
-  <% else %>
-    <% session[:dealer_cards].each_with_index do |card, index| %>
-      <%= card_image(card) %>
-    <% end %>
+  <% if @dealer_turn %>
+    <h4>Dealer's Turn</h4>
+    <form>
+      <button type="submit" class="btn btn-primary" formaction="/blackjack/dealer_hit" formmethod="post">See Dealer's Next Card</button>
+    </form>
   <% end %>
+
+  <% if @game_over %>
+    <h4>Game Over!</h4>
+    <form action="/blackjack/new" method="get">
+      <input type="submit" class="btn" value="New Game" />
+    </form>
+  <% end %>
+  <% if @player_turn %> 
+    <h4><%= session[:player_name] %>'s Turn</h4>
+    <p>What would <%= session[:player_name] %> like to do?</p>
+    <form id="hit_button" action="/blackjack/player_hit" method="post">
+      <input type="submit" class="btn btn-success"  value="Hit">
+    </form>
+
+    <form id="stay_button" action="/blackjack/player_stay" method="post">
+
+      <input type="submit" class="btn btn-warning" value="Stay" />
+    </form>
+  <% end %>
+
+  <p> </p>
+
+  <%if @msg %>
+    <div class="alert alert-info" id="message"><%=@msg%></div>
+  <% end %>
+
+
+
 </div>
 
-<p><%= "Dealer's Total: #{calculate_score(session[:dealer_cards])}" if !@player_turn %></p>
+<div  id="main">
+  <!-- Dealer Cards -->
+  <div class="well" >
+    <h4> 
+      Dealer's Cards <%= "(Total Score: #{calculate_score(session[:dealer_cards])})" if !@player_turn %>
+    </h4>
+  </div>
 
-
-<form>
-<% if @dealer_turn %>
-  <button type="submit" class="btn btn-primary" formaction="/blackjack/dealer_hit" formmethod="post">See Dealer's Next Card</button>
-<% end %>
-</form>
-
-<!-- Player's Cards -->
-
-<h4> <%= "#{session[:player_name]}'s Cards:" %> </h4>
-
-<div class="well" id="card_table">
-    <% session[:player_cards].each do |card| %>
-      <%= card_image(card) %>
+  <div class="well" id="card_table">
+    <% if @player_turn %>
+      <%= card_image('cover') %>
+      <%= card_image(session[:dealer_cards][1]) %>
+    <% else %>
+      <% session[:dealer_cards].each_with_index do |card, index| %>
+        <%= card_image(card) %>
+      <% end %>
     <% end %>
+  </div>
+
+
+
+
+  <!-- Player's Cards -->
+
+  <div class="well" >
+    <h4 >
+      <%= "#{session[:player_name]}'s Cards (Total Score: #{calculate_score(session[:player_cards])})" %>
+    </h4>
+  </div>
+  <div class="well" id="card_table">
+      <% session[:player_cards].each do |card| %>
+        <%= card_image(card) %>
+      <% end %>
+  </div>
 </div>
-<p><%= "#{session[:player_name]}'s Total: #{calculate_score(session[:player_cards])}" %></p>
 
-
-
-
-
-<% if @player_turn %> 
-  <p>What would <%= session[:player_name] %> like to do?</p>
-  <form id="hit_button" action="/blackjack/player_hit" method="post">
-    <input type="submit" class="btn btn-success"  value="Hit">
-  </form>
-
-  <form id="stay_button" action="/blackjack/player_stay" method="post">
-
-    <input type="submit" class="btn btn-warning" value="Stay" />
-  </form>
-<% end %>
 
 
 

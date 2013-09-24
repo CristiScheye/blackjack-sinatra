@@ -1,7 +1,3 @@
-div#card_table {
-  background-color: green;
-}
-
 form#hit_button, 
 form#stay_button {
   float: left;
@@ -11,3 +7,25 @@ form#stay_button {
 h1#title {
   text-align: center;
 }
+
+
+div#card_table {
+  background-color: green;
+
+}
+
+div#sidebar {
+  height: auto;
+  width: 15%;
+  float: left;
+}
+
+div#main {
+  float: right;
+  width:80%;
+}
+
+div#message {
+  fixed: bottom;
+}
+

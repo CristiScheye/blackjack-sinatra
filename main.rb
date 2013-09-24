@@ -21,7 +21,7 @@ helpers do
     end
 
     # Correct for Aces
-    values.select{|val| val == 'A'}.count.times do
+    values.select{|val| val == 'Ace'}.count.times do
       break if score <= 21
       score -= 10
     end

@@ -13,7 +13,7 @@ helpers do
     score = 0
 
     values.each do |value|
-      if value == 'A'
+      if value == 'Ace'
         score += 11
       else 
         score += (value.to_i == 0 ? 10 : value.to_i)

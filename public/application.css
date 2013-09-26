@@ -26,6 +26,16 @@ div#main {
 }
 
 div#message {
-  fixed: bottom;
+  clear: both;
+}
+
+
+div#turn_section {
+  min-height: 120px;
+  text-align: left;
+}
+div#purse_section
+div#message_section {
+  min-height: 520px;
 }
 

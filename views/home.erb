@@ -1,7 +1,7 @@
-<span style="text-align: center"> 
-  <h1>Welcome, <%= session[:player_name] %></h1>
+<div> 
+  <h1 id="title">Welcome, <%= session[:player_name] %></h1>
   <br/>
   <h3>What game would you like to play? </h3>
-</span>
+</div>
 
-<a href="/blackjack/new"><button type="button" class="btn btn-info">Blackjack</button></a>
+<a href="/blackjack/place_bet"><button type="button" class="btn btn-info">Blackjack</button></a>

@@ -45,20 +45,24 @@ helpers do
 
   def check_player_score
     if is_busted?(session[:player_cards])
-      @msg = "Sorry #{session[:player_name]}, you busted. You lose :("
+      @msg_fail = "Sorry #{session[:player_name]}, you busted. You lose :("
+      session[:player_purse] -= session[:bet]
       end_game_variables
     elsif is_blackjack?(session[:player_cards])
-      @msg = "Congrats #{session[:player_name]}, you got blackjack! You win :)"
+      @msg_success = "Congrats #{session[:player_name]}, you got blackjack! You win :)"
+      session[:player_purse] += session[:bet]
       end_game_variables
     end
   end
 
   def check_dealer_score
     if is_busted?(session[:dealer_cards])  # score > 21
-      @msg = "Dealer busted! You win :)"
+      @msg_success = "Dealer busted! You win :)"
+      session[:player_purse] += session[:bet]
       end_game_variables
     elsif is_blackjack?(session[:dealer_cards]) # score == 21
-      @msg = 'Dealer hit blackjack. You lose :('
+      @msg_fail = 'Dealer hit blackjack. You lose :('
+      session[:player_purse] -= session[:bet]
       end_game_variables
     elsif calculate_score(session[:dealer_cards]) < 17
       @dealer_turn = true
@@ -72,11 +76,13 @@ helpers do
     dealer_score = calculate_score(dealer_hand)
     player_score = calculate_score(player_hand)
     if dealer_score > player_score
-      @msg = "Sorry, you lose. Dealer's total of #{dealer_score} beat your score of #{player_score}."
+      @msg_fail = "Sorry, you lose. Dealer's total of #{dealer_score} beat your score of #{player_score}."
+      session[:player_purse] -= session[:bet]
     elsif dealer_score < player_score
-      @msg = "Congrats, you win! Your total of #{player_score} beat the dealer's score of #{dealer_score}."
+      @msg_success = "Congrats, you win! Your total of #{player_score} beat the dealer's score of #{dealer_score}."
+      session[:player_purse] += session[:bet]
     else
-      @msg = "It's a tie."
+      @msg_success = "It's a tie."
     end
   end
 
@@ -114,15 +120,31 @@ end
 post '/new_player' do
   if params[:player_name].empty?
     @error = 'Must enter a name'
-    erb :new_player
-  else
-    session[:player_name] = params[:player_name]
-    redirect '/home'
+    halt erb :new_player
   end
+
+  session[:player_name] = params[:player_name]
+  #give player $
+  session[:player_purse] = 500
+  redirect '/home'
 end
 
 get '/home' do
   erb :home
+end
+
+get '/blackjack/place_bet' do
+  erb :place_bet
+end
+
+post '/blackjack/place_bet' do
+  if params[:bet].to_i > 500 || params[:bet].to_i <= 0
+    @error = "Must enter a valid amount, between $1 and $#{session[:player_purse]}"
+    halt erb :place_bet
+  end
+
+  session[:bet] = params[:bet].to_i
+  redirect '/blackjack/new'
 end
 
 get '/blackjack/new' do

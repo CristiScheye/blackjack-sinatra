@@ -1,0 +1,8 @@
+<h1 id="title">Blackjack</h1>
+<h4>Your current purse is $<%= session[:player_purse] %>
+<h4>Place a bet for this round:</h4>
+
+<form action="/blackjack/place_bet" method="post">
+$ <input type="text" name="bet" />
+<input type="submit" value="Place Bet" class="btn btn-primary"/>
+</form>

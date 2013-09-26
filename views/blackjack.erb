@@ -29,9 +29,14 @@
       <%if @msg_fail %>
         <div class="alert alert-error" id="message"><%=@msg_fail%></div>
       <% end %>
+
+      <p>Play another round?</p>
       <form action="/blackjack/place_bet" method="get">
-        <input type="submit" class="btn" value="New Game" />
-      </form>      
+        <input type="submit" class="btn btn-primary" value="New Round" />
+      </form> 
+      <form action="/blackjack/home" method="get">
+        <input type="submit" class="btn " value="I'm Done" />
+      </form>     
     <% end %>
 
     <% if @player_turn %> 

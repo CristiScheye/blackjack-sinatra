@@ -105,11 +105,7 @@ before do
 end
 
 get '/' do
-  if session[:player_name]
-    redirect '/home'
-  else
-    redirect '/new_player'
-  end
+  redirect '/new_player'
 end
 
 get '/new_player' do
@@ -126,11 +122,15 @@ post '/new_player' do
   session[:player_name] = params[:player_name]
   #give player $
   session[:player_purse] = 500
-  redirect '/home'
+  redirect '/blackjack/place_bet'
 end
 
 get '/home' do
   erb :home
+end
+
+get '/done' do
+  erb :done
 end
 
 get '/blackjack/place_bet' do
@@ -173,19 +173,17 @@ get '/blackjack' do
 end
 
 post '/blackjack/player_hit' do
-  @msg = 'You chose to hit'
   session[:player_cards] << session[:deck].pop
   check_player_score
  
-  erb :blackjack
+  erb :blackjack, layout: false
 end
 
 post '/blackjack/player_stay' do
-  @msg = 'You chose to stay.'
   @player_turn = false
   check_dealer_score # if dealer's score is between 17 and 21, will also compare scores
   
-  erb :blackjack
+  erb :blackjack, layout: false
 end
 
 post '/blackjack/dealer_hit' do
@@ -193,5 +191,5 @@ post '/blackjack/dealer_hit' do
   @player_turn = false
   check_dealer_score # if dealer's score is between 17 and 21, will also compare scores 
   
-  erb :blackjack
+  erb :blackjack, layout: false
 end

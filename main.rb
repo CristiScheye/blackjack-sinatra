@@ -138,7 +138,7 @@ get '/blackjack/place_bet' do
 end
 
 post '/blackjack/place_bet' do
-  if params[:bet].to_i > 500 || params[:bet].to_i <= 0
+  if params[:bet].to_i > session[:player_purse] || params[:bet].to_i <= 0
     @error = "Must enter a valid amount, between $1 and $#{session[:player_purse]}"
     halt erb :place_bet
   end

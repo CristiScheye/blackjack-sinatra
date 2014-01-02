@@ -133,7 +133,11 @@ get '/done' do
 end
 
 get '/blackjack/place_bet' do
-  erb :place_bet
+  if session[:player_purse] < 1
+    redirect '/you_lose'
+  else
+    erb :place_bet
+  end
 end
 
 post '/blackjack/place_bet' do
@@ -191,4 +195,13 @@ post '/blackjack/dealer_hit' do
   check_dealer_score # if dealer's score is between 17 and 21, will also compare scores 
   
   erb :blackjack, layout: false
+end
+
+get '/you_lose' do
+  erb :you_lose
+end
+
+post '/refill_purse' do
+  session[:player_purse] = 500
+  redirect '/blackjack/place_bet'
 end
